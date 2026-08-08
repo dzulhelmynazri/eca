@@ -1,0 +1,81 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"ui": "tui",
+	"globalDependencies": [".env*", "**/.env*"],
+	"globalEnv": [
+		"CORS_ORIGIN",
+		"DATABASE_URL",
+		"DATABASE_URL_DIRECT",
+		"EVE_AGENT_URL",
+		"BETTER_AUTH_URL",
+		"BETTER_AUTH_SECRET",
+		"GOOGLE_CLIENT_ID",
+		"GOOGLE_CLIENT_SECRET",
+		"VERCEL_OIDC_TOKEN",
+		"RESEND_API_KEY",
+		"RESEND_WEBHOOK_SECRET",
+		"RESEND_FROM_ADDRESS",
+		"AI_GATEWAY_API_KEY",
+		"FIRECRAWL_API_KEY",
+		"INTEGRATIONS_ENCRYPTION_KEY",
+		"STORAGE_ENCRYPTION_KEY",
+		"NEON_STORAGE_BUCKET",
+		"AWS_ENDPOINT_URL_S3",
+		"AWS_ACCESS_KEY_ID",
+		"AWS_SECRET_ACCESS_KEY",
+		"AWS_REGION",
+		"CRON_SECRET",
+		"REDIS_URL",
+		"AGENT_DISPLAY_NAME",
+		"TELEGRAM_BOT_TOKEN",
+		"DISCORD_BOT_TOKEN",
+		"DISCORD_PUBLIC_KEY",
+		"WHATSAPP_ACCESS_TOKEN",
+		"WHATSAPP_APP_SECRET",
+		"WHATSAPP_PHONE_NUMBER_ID",
+		"WHATSAPP_VERIFY_TOKEN",
+		"FACEBOOK_APP_SECRET",
+		"FACEBOOK_PAGE_ACCESS_TOKEN",
+		"FACEBOOK_VERIFY_TOKEN",
+		"TWILIO_ACCOUNT_SID",
+		"TWILIO_AUTH_TOKEN",
+		"TWILIO_ALLOW_FROM",
+		"TWILIO_MESSAGING_FROM",
+		"UPSTASH_REDIS_REST_URL",
+		"UPSTASH_REDIS_REST_TOKEN"
+	],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$"],
+			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"]
+		},
+		"check-types": {
+			"dependsOn": ["^check-types"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"db:push": {
+			"cache": false
+		},
+		"db:generate": {
+			"cache": false
+		},
+		"db:migrate": {
+			"cache": false,
+			"persistent": true
+		},
+		"db:seed": {
+			"cache": false
+		},
+		"db:studio": {
+			"cache": false,
+			"persistent": true
+		}
+	}
+}

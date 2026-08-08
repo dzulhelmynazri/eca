@@ -1,0 +1,47 @@
+{
+	"name": "web",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --port 3001",
+		"build": "next build",
+		"check-types": "tsc --noEmit",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@prisma/client": "catalog:",
+		"@swc/helpers": "^0.5.23",
+		"@tanstack/react-query": "^5.101.4",
+		"@trpc/client": "catalog:",
+		"@trpc/server": "catalog:",
+		"@trpc/tanstack-react-query": "^11.18.0",
+		"@use-forever/api": "workspace:*",
+		"@use-forever/auth": "workspace:*",
+		"@use-forever/db": "workspace:*",
+		"@use-forever/env": "workspace:*",
+		"@use-forever/next-config": "workspace:*",
+		"@use-forever/storage": "workspace:*",
+		"@use-forever/ui": "workspace:*",
+		"babel-plugin-react-compiler": "^1.0.0",
+		"clsx": "^2.1.1",
+		"dotenv": "catalog:",
+		"lucide-react": "catalog:",
+		"next": "catalog:",
+		"next-themes": "catalog:",
+		"react": "catalog:",
+		"react-dom": "catalog:",
+		"sonner": "catalog:",
+		"tailwind-merge": "^3.6.0",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@tailwindcss/postcss": "catalog:",
+		"@tanstack/react-query-devtools": "^5.101.4",
+		"@types/node": "^26.1.2",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"@use-forever/config": "workspace:*",
+		"tailwindcss": "catalog:",
+		"typescript": "catalog:"
+	}
+}

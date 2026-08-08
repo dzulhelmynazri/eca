@@ -1,0 +1,14 @@
+{
+	"name": "docs",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "blume dev",
+		"build": "blume build --no-strict",
+		"doctor": "blume doctor"
+	},
+	"dependencies": {
+		"@use-forever/env": "workspace:*",
+		"blume": "^1.3.1"
+	}
+}

@@ -1,0 +1,137 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/runtime"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/docs"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/api"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/auth"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/config"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/contracts"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/db"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/email"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/env"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/next-config"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/storage"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/ui"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/utils"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+    labels:
+      - "dependencies"

@@ -1,0 +1,21 @@
+---
+title: Integrations API Guide
+description: Quick guide to integration endpoints and behavior.
+---
+
+# Integrations API Guide
+
+Use this guide as a quick map. Full endpoint schemas and request examples are generated under `/reference`.
+
+## Endpoints
+
+- `GET /v1/integrations`
+- `GET /v1/integrations/health`
+- `PUT /v1/integrations/twilio`
+- `PUT /v1/integrations/telegram`
+
+## Notes
+
+- Integration routes are tenant-scoped and require `x-workspace-id`.
+- Twilio and Telegram upsert routes require workspace admin permissions.
+- Responses return a `Workspace` snapshot with current integration status.

@@ -1,0 +1,23 @@
+---
+title: Knowledge API Guide
+description: Quick guide to knowledge source and search endpoints.
+---
+
+# Knowledge API Guide
+
+The Knowledge API lets you manage ingestion sources and perform semantic search over indexed chunks.
+
+## Endpoints
+
+- `GET /v1/knowledge/sources`
+- `POST /v1/knowledge/sources`
+- `GET /v1/knowledge/sources/{sourceId}`
+- `DELETE /v1/knowledge/sources/{sourceId}`
+- `POST /v1/knowledge/sources/{sourceId}/resync`
+- `POST /v1/knowledge/search`
+
+## Notes
+
+- Sources are user-owned (same ownership model as customers).
+- `create` and `resync` trigger background ingestion jobs.
+- Search accepts optional `sourceIds` and capped `limit` (max 20).

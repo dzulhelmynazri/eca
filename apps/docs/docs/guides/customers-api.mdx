@@ -1,0 +1,27 @@
+---
+title: Customers API Guide
+description: Quick guide to the Customers endpoints and data model.
+---
+
+# Customers API Guide
+
+Use this guide for a quick overview. For endpoint-level details, examples, and schemas, go to the generated API reference at `/reference/customers`.
+
+## Data model
+
+Each customer includes:
+
+- `id`
+- `name`
+- `phone`
+- `channels` (`telegram`, `twilio-sms`, `twilio-voice`)
+
+## Endpoints
+
+- `GET /v1/customers`
+- `POST /v1/customers`
+- `GET /v1/customers/{customerId}`
+- `PATCH /v1/customers/{customerId}`
+- `DELETE /v1/customers/{customerId}`
+
+All endpoints require bearer authentication and only return data owned by the authenticated user.

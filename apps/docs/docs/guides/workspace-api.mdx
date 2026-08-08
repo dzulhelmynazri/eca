@@ -1,0 +1,20 @@
+---
+title: Workspace API Guide
+description: Quick guide to workspace endpoint behavior.
+---
+
+# Workspace API Guide
+
+Use this guide as a quick map. Full request/response schema docs are generated under `/reference`.
+
+## Endpoint
+
+- `GET /v1/workspace`
+
+## Notes
+
+- The route is tenant-scoped and requires `x-workspace-id`.
+- Response includes:
+  - workspace metadata
+  - effective `customerOwnerUserId`
+  - integration status snapshots

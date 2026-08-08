@@ -1,0 +1,31 @@
+{
+	"name": "@use-forever/api",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"scripts": {},
+	"dependencies": {
+		"@firecrawl/anydoc": "^0.1.5",
+		"@trpc/client": "catalog:",
+		"@trpc/server": "catalog:",
+		"@use-forever/auth": "workspace:*",
+		"@use-forever/contracts": "workspace:*",
+		"@use-forever/db": "workspace:*",
+		"@use-forever/env": "workspace:*",
+		"@use-forever/storage": "workspace:*",
+		"ai": "^7.0.52",
+		"dotenv": "catalog:",
+		"next": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@use-forever/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

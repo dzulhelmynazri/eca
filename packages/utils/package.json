@@ -1,0 +1,28 @@
+{
+	"name": "@use-forever/utils",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./slug": {
+			"default": "./src/slug.ts"
+		},
+		"./date": {
+			"default": "./src/date.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"date-fns": "^4.4.0",
+		"slugify": "^1.6.9"
+	},
+	"devDependencies": {
+		"@use-forever/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

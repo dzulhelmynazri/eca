@@ -1,0 +1,57 @@
+{
+	"name": "@use-forever/ui",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./globals.css": "./src/styles/globals.css",
+		"./lib/*": "./src/lib/*.ts",
+		"./components/ai-elements/*": "./src/components/ai-elements/*.tsx",
+		"./components/*": "./src/components/*.tsx",
+		"./components/socials": "./src/components/socials/index.ts",
+		"./hooks/*": "./src/hooks/*.ts",
+		"./postcss.config": "./postcss.config.mjs"
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@base-ui/react": "^1.6.0",
+		"@radix-ui/react-use-controllable-state": "1.2.2",
+		"@shadcn/react": "^0.2.1",
+		"@streamdown/cjk": "1.0.3",
+		"@streamdown/code": "1.1.1",
+		"@streamdown/math": "1.0.2",
+		"@streamdown/mermaid": "1.0.2",
+		"ai": "^7.0.38",
+		"class-variance-authority": "^0.7.1",
+		"cmdk": "^1.1.1",
+		"cnfast": "^0.1.0",
+		"date-fns": "^4.4.0",
+		"embla-carousel-react": "^8.6.0",
+		"input-otp": "^1.4.2",
+		"lucide-react": "catalog:",
+		"motion": "12.40.0",
+		"nanoid": "5.1.11",
+		"next-themes": "catalog:",
+		"react": "catalog:",
+		"react-day-picker": "^10.0.1",
+		"react-dom": "catalog:",
+		"react-resizable-panels": "^4.12.2",
+		"recharts": "3.10.1",
+		"shadcn": "^4.16.1",
+		"shiki": "4.1.0",
+		"sonner": "catalog:",
+		"streamdown": "2.5.0",
+		"tw-animate-css": "^1.4.0",
+		"use-stick-to-bottom": "1.1.4"
+	},
+	"devDependencies": {
+		"@tailwindcss/postcss": "catalog:",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"@use-forever/config": "workspace:*",
+		"tailwindcss": "catalog:",
+		"typescript": "catalog:"
+	}
+}

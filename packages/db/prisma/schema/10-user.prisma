@@ -1,0 +1,23 @@
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  customers     Customer[]
+  knowledgeSources KnowledgeSource[]
+  knowledgeDocuments KnowledgeDocument[]
+  knowledgeChunks KnowledgeChunk[]
+  knowledgeIngestionJobs KnowledgeIngestionJob[]
+  ownedWorkspaces Workspace[] @relation("WorkspaceOwner")
+  workspaceCustomerOwnerFor Workspace[] @relation("WorkspaceCustomerOwner")
+  createdWorkspaceIntegrations WorkspaceIntegration[] @relation("WorkspaceIntegrationCreatedBy")
+  updatedWorkspaceIntegrations WorkspaceIntegration[] @relation("WorkspaceIntegrationUpdatedBy")
+
+  @@unique([email])
+  @@map("user")
+}

@@ -1,0 +1,25 @@
+{
+	"name": "@use-forever/auth",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./client": {
+			"default": "./src/client.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@better-auth/prisma-adapter": "^1.6.26",
+		"@use-forever/db": "workspace:*",
+		"@use-forever/env": "workspace:*",
+		"better-auth": "^1.6.26"
+	},
+	"devDependencies": {
+		"@use-forever/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

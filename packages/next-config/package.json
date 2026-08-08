@@ -1,0 +1,19 @@
+{
+	"name": "@use-forever/next-config",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"next": "catalog:"
+	},
+	"devDependencies": {
+		"@use-forever/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

@@ -1,0 +1,1036 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "use-forever API",
+		"description": "API reference for use-forever customers and integrations.",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "https://api.hackathon.space",
+			"description": "Production"
+		}
+	],
+	"tags": [
+		{
+			"name": "Customers",
+			"description": "Create, retrieve, update, and delete customer records."
+		},
+		{
+			"name": "Knowledge",
+			"description": "Manage knowledge sources and semantic search."
+		},
+		{
+			"name": "Integrations",
+			"description": "Manage and inspect tenant integration providers."
+		},
+		{
+			"name": "Workspace",
+			"description": "Workspace context and tenant snapshot endpoints."
+		}
+	],
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		},
+		"parameters": {
+			"WorkspaceIdHeader": {
+				"name": "x-workspace-id",
+				"in": "header",
+				"required": true,
+				"description": "Workspace context for tenant procedures.",
+				"schema": {
+					"type": "string"
+				}
+			}
+		},
+		"schemas": {
+			"Customer": {
+				"type": "object",
+				"required": ["id", "name", "phone", "channels"],
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "cus_123"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 120,
+						"example": "Jane Doe"
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^\\+?[0-9()\\s-]{7,20}$",
+						"example": "+60123456789"
+					},
+					"channels": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": ["telegram", "twilio-sms", "twilio-voice"]
+						},
+						"minItems": 1,
+						"example": ["telegram", "twilio-sms"]
+					}
+				}
+			},
+			"CreateCustomerRequest": {
+				"type": "object",
+				"required": ["name", "phone", "channels"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 120
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^\\+?[0-9()\\s-]{7,20}$"
+					},
+					"channels": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": ["telegram", "twilio-sms", "twilio-voice"]
+						},
+						"minItems": 1
+					}
+				}
+			},
+			"UpdateCustomerRequest": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 120
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^\\+?[0-9()\\s-]{7,20}$"
+					},
+					"channels": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": ["telegram", "twilio-sms", "twilio-voice"]
+						},
+						"minItems": 1
+					}
+				},
+				"additionalProperties": false
+			},
+			"IntegrationProvider": {
+				"type": "string",
+				"enum": ["TELEGRAM", "TWILIO"]
+			},
+			"IntegrationStatus": {
+				"type": "object",
+				"required": ["provider", "updatedAt"],
+				"properties": {
+					"provider": {
+						"$ref": "#/components/schemas/IntegrationProvider"
+					},
+					"updatedAt": {
+						"type": ["string", "null"],
+						"format": "date-time"
+					}
+				}
+			},
+			"Workspace": {
+				"type": "object",
+				"required": ["workspaceId", "workspaceName", "customerOwnerUserId", "integrations"],
+				"properties": {
+					"workspaceId": {
+						"type": "string"
+					},
+					"workspaceName": {
+						"type": "string"
+					},
+					"customerOwnerUserId": {
+						"type": "string"
+					},
+					"integrations": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IntegrationStatus"
+						}
+					}
+				}
+			},
+			"IntegrationHealth": {
+				"type": "object",
+				"required": [
+					"provider",
+					"totalRows",
+					"decryptableRows",
+					"latestUpdatedAt",
+					"latestDecryptableUpdatedAt"
+				],
+				"properties": {
+					"provider": {
+						"$ref": "#/components/schemas/IntegrationProvider"
+					},
+					"totalRows": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"decryptableRows": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"latestUpdatedAt": {
+						"type": ["string", "null"],
+						"format": "date-time"
+					},
+					"latestDecryptableUpdatedAt": {
+						"type": ["string", "null"],
+						"format": "date-time"
+					}
+				}
+			},
+			"IntegrationHealthReport": {
+				"type": "object",
+				"required": ["checkedAt", "providers"],
+				"properties": {
+					"checkedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"providers": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IntegrationHealth"
+						}
+					}
+				}
+			},
+			"UpsertTwilioIntegrationRequest": {
+				"type": "object",
+				"required": ["accountSid", "authToken", "messagingFrom", "allowFrom"],
+				"properties": {
+					"accountSid": {
+						"type": "string",
+						"minLength": 1
+					},
+					"authToken": {
+						"type": "string",
+						"minLength": 1
+					},
+					"messagingFrom": {
+						"type": "string",
+						"minLength": 1
+					},
+					"allowFrom": {
+						"type": "string",
+						"minLength": 1,
+						"default": "*"
+					}
+				}
+			},
+			"UpsertTelegramIntegrationRequest": {
+				"type": "object",
+				"required": ["botToken", "webhookSecretToken"],
+				"properties": {
+					"botToken": {
+						"type": "string",
+						"minLength": 1
+					},
+					"webhookSecretToken": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"KnowledgeSourceType": {
+				"type": "string",
+				"enum": ["FILE", "WEBSITE"]
+			},
+			"KnowledgeSourceStatus": {
+				"type": "string",
+				"enum": ["READY", "SYNCING", "FAILED"]
+			},
+			"KnowledgeSource": {
+				"type": "object",
+				"required": [
+					"id",
+					"name",
+					"type",
+					"status",
+					"sourceUrl",
+					"fileKey",
+					"fileName",
+					"sizeBytes",
+					"lastSyncedAt",
+					"lastSyncError",
+					"createdAt",
+					"updatedAt"
+				],
+				"properties": {
+					"id": {
+						"type": "string",
+						"minLength": 1
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 160
+					},
+					"type": {
+						"$ref": "#/components/schemas/KnowledgeSourceType"
+					},
+					"status": {
+						"$ref": "#/components/schemas/KnowledgeSourceStatus"
+					},
+					"sourceUrl": {
+						"type": ["string", "null"],
+						"format": "uri"
+					},
+					"fileKey": {
+						"type": ["string", "null"]
+					},
+					"fileName": {
+						"type": ["string", "null"]
+					},
+					"sizeBytes": {
+						"type": ["integer", "null"],
+						"minimum": 1
+					},
+					"lastSyncedAt": {
+						"type": ["string", "null"],
+						"format": "date-time"
+					},
+					"lastSyncError": {
+						"type": ["string", "null"]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"CreateKnowledgeFileSourceRequest": {
+				"type": "object",
+				"required": ["type", "name", "fileName"],
+				"properties": {
+					"type": {
+						"type": "string",
+						"const": "FILE"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 160
+					},
+					"fileName": {
+						"type": "string",
+						"minLength": 1
+					},
+					"fileKey": {
+						"type": "string",
+						"minLength": 1
+					},
+					"sizeBytes": {
+						"type": "integer",
+						"minimum": 1
+					}
+				}
+			},
+			"CreateKnowledgeWebsiteSourceRequest": {
+				"type": "object",
+				"required": ["type", "name", "sourceUrl"],
+				"properties": {
+					"type": {
+						"type": "string",
+						"const": "WEBSITE"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 160
+					},
+					"sourceUrl": {
+						"type": "string",
+						"format": "uri"
+					}
+				}
+			},
+			"CreateKnowledgeSourceRequest": {
+				"oneOf": [
+					{
+						"$ref": "#/components/schemas/CreateKnowledgeFileSourceRequest"
+					},
+					{
+						"$ref": "#/components/schemas/CreateKnowledgeWebsiteSourceRequest"
+					}
+				]
+			},
+			"SearchKnowledgeRequest": {
+				"type": "object",
+				"required": ["query"],
+				"properties": {
+					"query": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 2000
+					},
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 20,
+						"default": 8
+					},
+					"sourceIds": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				}
+			},
+			"KnowledgeSearchResult": {
+				"type": "object",
+				"required": ["chunkId", "content", "documentId", "score", "sourceId", "sourceName"],
+				"properties": {
+					"chunkId": {
+						"type": "string",
+						"minLength": 1
+					},
+					"content": {
+						"type": "string",
+						"minLength": 1
+					},
+					"documentId": {
+						"type": "string",
+						"minLength": 1
+					},
+					"score": {
+						"type": "number",
+						"minimum": 0,
+						"maximum": 1
+					},
+					"sourceId": {
+						"type": "string",
+						"minLength": 1
+					},
+					"sourceName": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"ErrorResponse": {
+				"type": "object",
+				"required": ["code", "message"],
+				"properties": {
+					"code": {
+						"type": "string",
+						"example": "NOT_FOUND"
+					},
+					"message": {
+						"type": "string",
+						"example": "Resource not found."
+					}
+				}
+			}
+		}
+	},
+	"security": [
+		{
+			"bearerAuth": []
+		}
+	],
+	"paths": {
+		"/v1/customers": {
+			"get": {
+				"tags": ["Customers"],
+				"summary": "List customers",
+				"description": "Returns all customers for the authenticated user, ordered by creation date descending.",
+				"operationId": "listCustomers",
+				"responses": {
+					"200": {
+						"description": "Customers retrieved successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Customer"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Customers"],
+				"summary": "Create customer",
+				"description": "Creates a customer for the authenticated user.",
+				"operationId": "createCustomer",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateCustomerRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Customer created successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Customer"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/customers/{customerId}": {
+			"parameters": [
+				{
+					"name": "customerId",
+					"in": "path",
+					"required": true,
+					"description": "Customer identifier.",
+					"schema": {
+						"type": "string"
+					}
+				}
+			],
+			"get": {
+				"tags": ["Customers"],
+				"summary": "Get customer",
+				"description": "Returns a single owned customer.",
+				"operationId": "getCustomerById",
+				"responses": {
+					"200": {
+						"description": "Customer retrieved successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Customer"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Customer not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": ["Customers"],
+				"summary": "Update customer",
+				"description": "Updates one owned customer.",
+				"operationId": "updateCustomer",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateCustomerRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Customer updated successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Customer"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Customer not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Customers"],
+				"summary": "Delete customer",
+				"description": "Deletes one owned customer.",
+				"operationId": "deleteCustomer",
+				"responses": {
+					"200": {
+						"description": "Customer deleted successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Customer"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Customer not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/knowledge/sources": {
+			"get": {
+				"tags": ["Knowledge"],
+				"summary": "List knowledge sources",
+				"description": "Returns all knowledge sources for the authenticated user, ordered by creation date descending.",
+				"operationId": "listKnowledgeSources",
+				"responses": {
+					"200": {
+						"description": "Knowledge sources retrieved successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/KnowledgeSource"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Knowledge"],
+				"summary": "Create knowledge source",
+				"description": "Creates a FILE or WEBSITE knowledge source and triggers ingestion.",
+				"operationId": "createKnowledgeSource",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateKnowledgeSourceRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Knowledge source created.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KnowledgeSource"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/knowledge/sources/{sourceId}": {
+			"parameters": [
+				{
+					"name": "sourceId",
+					"in": "path",
+					"required": true,
+					"schema": {
+						"type": "string"
+					}
+				}
+			],
+			"get": {
+				"tags": ["Knowledge"],
+				"summary": "Get knowledge source",
+				"description": "Returns one owned knowledge source by id.",
+				"operationId": "getKnowledgeSourceById",
+				"responses": {
+					"200": {
+						"description": "Knowledge source retrieved.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KnowledgeSource"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Knowledge source not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Knowledge"],
+				"summary": "Delete knowledge source",
+				"description": "Deletes one owned knowledge source.",
+				"operationId": "deleteKnowledgeSource",
+				"responses": {
+					"200": {
+						"description": "Knowledge source deleted.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KnowledgeSource"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Knowledge source not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/knowledge/sources/{sourceId}/resync": {
+			"post": {
+				"tags": ["Knowledge"],
+				"summary": "Resync knowledge source",
+				"description": "Queues ingestion for an existing knowledge source if no active job exists.",
+				"operationId": "resyncKnowledgeSource",
+				"parameters": [
+					{
+						"name": "sourceId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Knowledge source state after resync request.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KnowledgeSource"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Knowledge source not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/knowledge/search": {
+			"post": {
+				"tags": ["Knowledge"],
+				"summary": "Search knowledge",
+				"description": "Semantic search over owned knowledge chunks, optionally filtered by source ids.",
+				"operationId": "searchKnowledge",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SearchKnowledgeRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Search results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/KnowledgeSearchResult"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/workspace": {
+			"get": {
+				"tags": ["Workspace"],
+				"summary": "Get workspace snapshot",
+				"description": "Returns the current workspace details and integration status for the tenant context.",
+				"operationId": "getWorkspace",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Workspace retrieved successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/integrations": {
+			"get": {
+				"tags": ["Integrations"],
+				"summary": "Get integration status",
+				"description": "Returns the workspace snapshot with provider connection timestamps.",
+				"operationId": "getIntegrations",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Workspace integration status retrieved.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/integrations/health": {
+			"get": {
+				"tags": ["Integrations"],
+				"summary": "Get integration health",
+				"description": "Returns health stats for tenant integration records.",
+				"operationId": "getIntegrationsHealth",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Integration health report retrieved.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IntegrationHealthReport"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/integrations/twilio": {
+			"put": {
+				"tags": ["Integrations"],
+				"summary": "Upsert Twilio integration",
+				"description": "Creates or updates Twilio credentials for the current workspace. Requires workspace admin access.",
+				"operationId": "upsertTwilioIntegration",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpsertTwilioIntegrationRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Workspace snapshot after Twilio upsert.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden for non-admin members.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Integrations"],
+				"summary": "Disconnect Twilio integration",
+				"description": "Removes Twilio credentials for the current workspace. Requires workspace admin access.",
+				"operationId": "disconnectTwilioIntegration",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Workspace snapshot after Twilio disconnect.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden for non-admin members.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/integrations/telegram": {
+			"put": {
+				"tags": ["Integrations"],
+				"summary": "Upsert Telegram integration",
+				"description": "Creates or updates Telegram credentials for the current workspace. Requires workspace admin access.",
+				"operationId": "upsertTelegramIntegration",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpsertTelegramIntegrationRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Workspace snapshot after Telegram upsert.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden for non-admin members.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Integrations"],
+				"summary": "Disconnect Telegram integration",
+				"description": "Removes Telegram credentials for the current workspace. Requires workspace admin access.",
+				"operationId": "disconnectTelegramIntegration",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/WorkspaceIdHeader"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Workspace snapshot after Telegram disconnect.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Workspace"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden for non-admin members.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

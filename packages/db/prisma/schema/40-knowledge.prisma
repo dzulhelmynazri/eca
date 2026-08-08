@@ -1,0 +1,104 @@
+enum KnowledgeSourceType {
+  FILE
+  WEBSITE
+}
+
+enum KnowledgeSourceStatus {
+  READY
+  SYNCING
+  FAILED
+}
+
+enum KnowledgeJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model KnowledgeSource {
+  id                String                @id @default(cuid())
+  userId            String
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  type              KnowledgeSourceType
+  status            KnowledgeSourceStatus @default(SYNCING)
+  sourceUrl         String?
+  fileKey           String?
+  fileName          String?
+  sizeBytes         Int?
+  lastSyncedAt      DateTime?
+  lastSyncError     String?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  documents         KnowledgeDocument[]
+  chunks            KnowledgeChunk[]
+  ingestionJobs     KnowledgeIngestionJob[]
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, status, updatedAt(sort: Desc)])
+  @@map("knowledge_source")
+}
+
+model KnowledgeDocument {
+  id                 String          @id @default(cuid())
+  userId             String
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceId           String
+  source             KnowledgeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  title              String
+  externalId         String?
+  contentMarkdown    String
+  contentText        String
+  contentHash        String
+  contentLength      Int
+  importedAt         DateTime        @default(now())
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  chunks             KnowledgeChunk[]
+
+  @@index([userId, sourceId, createdAt(sort: Desc)])
+  @@index([sourceId, contentHash])
+  @@map("knowledge_document")
+}
+
+model KnowledgeChunk {
+  id                 String          @id @default(cuid())
+  userId             String
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceId           String
+  source             KnowledgeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  documentId         String
+  document           KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  chunkIndex         Int
+  content            String
+  contentLength      Int
+  embeddingModel     String
+  embeddingDimension Int
+  embedding          Unsupported("vector")?
+  createdAt          DateTime        @default(now())
+
+  @@index([userId, sourceId, documentId, chunkIndex])
+  @@index([documentId, chunkIndex])
+  @@unique([documentId, chunkIndex])
+  @@map("knowledge_chunk")
+}
+
+model KnowledgeIngestionJob {
+  id             String             @id @default(cuid())
+  userId         String
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceId       String
+  source         KnowledgeSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  status         KnowledgeJobStatus @default(QUEUED)
+  trigger        String
+  startedAt      DateTime?
+  completedAt    DateTime?
+  errorMessage   String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@index([userId, sourceId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("knowledge_ingestion_job")
+}

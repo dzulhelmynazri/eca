@@ -1,0 +1,24 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"ignorePatterns": [
+		"**/.next/**",
+		"**/dist/**",
+		"**/.turbo/**",
+		"**/.nx/**",
+		"**/dev-dist/**",
+		"**/.zed/**",
+		"**/.vscode/**",
+		"**/routeTree.gen.ts",
+		"**/src-tauri/**",
+		"**/.nuxt/**",
+		"bts.jsonc",
+		"**/.expo/**",
+		"**/.wrangler/**",
+		"**/.alchemy/**",
+		"**/.svelte-kit/**",
+		"**/wrangler.jsonc",
+		"**/.source/**",
+		"**/convex/_generated/**"
+	]
+}

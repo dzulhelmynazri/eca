@@ -1,0 +1,23 @@
+{
+	"name": "@use-forever/storage",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.888.0",
+		"@aws-sdk/s3-presigned-post": "^3.888.0",
+		"@aws-sdk/s3-request-presigner": "^3.888.0",
+		"@use-forever/env": "workspace:*",
+		"files-sdk": "^2.2.3"
+	},
+	"devDependencies": {
+		"@use-forever/config": "workspace:*",
+		"typescript": "catalog:"
+	}
+}

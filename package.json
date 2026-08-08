@@ -1,0 +1,83 @@
+{
+	"name": "use-forever",
+	"private": true,
+	"workspaces": {
+		"packages": [
+			"apps/*",
+			"packages/*"
+		],
+		"catalog": {
+			"dotenv": "^17.4.2",
+			"zod": "^4.4.3",
+			"typescript": "^6.0.3",
+			"lucide-react": "^1.27.0",
+			"next": "^16.3.0",
+			"next-themes": "^0.4.6",
+			"react": "^19.2.8",
+			"react-dom": "^19.2.8",
+			"sonner": "^2.0.7",
+			"@prisma/client": "^7.9.1",
+			"@trpc/server": "^11.18.0",
+			"@trpc/client": "^11.18.0",
+			"@tailwindcss/postcss": "^4.3.3",
+			"@types/react": "^19.2.17",
+			"@types/react-dom": "^19.2.3",
+			"tailwindcss": "^4.3.3"
+		}
+	},
+	"type": "module",
+	"scripts": {
+		"dev": "turbo run dev",
+		"dev:runtime": "turbo run dev -F runtime",
+		"build": "turbo run build",
+		"check-types": "turbo run check-types",
+		"dev:web": "turbo run dev -F web",
+		"dev:docs": "turbo run dev -F docs",
+		"db:push": "turbo run db:push -F @use-forever/db",
+		"db:studio": "turbo run db:studio -F @use-forever/db",
+		"db:generate": "turbo run db:generate -F @use-forever/db",
+		"db:migrate": "turbo run db:migrate -F @use-forever/db",
+		"db:seed": "turbo run db:seed -F @use-forever/db",
+		"lint": "oxlint apps packages",
+		"lint:fix": "oxlint apps packages --fix",
+		"format": "oxfmt apps packages",
+		"format:check": "oxfmt apps packages --check",
+		"check": "ultracite check apps packages",
+		"fix": "ultracite fix apps packages",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1103.0",
+		"@aws-sdk/s3-presigned-post": "^3.1103.0",
+		"@aws-sdk/s3-request-presigner": "^3.1103.0",
+		"@tanstack/react-form": "^1.33.3",
+		"@tanstack/react-table": "^9.0.0",
+		"@use-forever/contracts": "workspace:*",
+		"@use-forever/env": "workspace:*",
+		"@use-forever/utils": "workspace:*",
+		"dotenv": "^17.4.2",
+		"files-sdk": "^2.2.3",
+		"libphonenumber-js": "^1.13.10",
+		"llamaindex": "^0.12.1",
+		"nuqs": "^2.9.4",
+		"ts-dedent": "^2.3.0",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@types/node": "^26.1.2",
+		"@use-forever/config": "workspace:*",
+		"husky": "^9.1.7",
+		"oxfmt": "^0.62.0",
+		"oxlint": "^1.77.0",
+		"turbo": "^2.10.8",
+		"typescript": "^7.0.2",
+		"ultracite": "7.10.0"
+	},
+	"overrides": {
+		"ai": "^7.0.38"
+	},
+	"engines": {
+		"node": "24.x"
+	},
+	"packageManager": "bun@1.3.14"
+}
