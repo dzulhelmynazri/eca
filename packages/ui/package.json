@@ -31,7 +31,7 @@
 		"embla-carousel-react": "^8.6.0",
 		"input-otp": "^1.4.2",
 		"lucide-react": "catalog:",
-		"motion": "12.43.0",
+		"motion": "13.0.0",
 		"nanoid": "6.0.1",
 		"next-themes": "catalog:",
 		"react": "catalog:",
