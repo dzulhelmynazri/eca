@@ -17,7 +17,7 @@
 		"@chat-adapter/state-memory": "^4.36.0",
 		"@chat-adapter/state-redis": "^4.36.0",
 		"@chat-adapter/whatsapp": "^4.36.0",
-		"@resend/chat-sdk-adapter": "^0.2.2",
+		"@resend/chat-sdk-adapter": "^0.3.0",
 		"@upstash/agentkit-eve-extension": "^0.4.0",
 		"@use-forever/api": "workspace:*",
 		"@use-forever/auth": "workspace:*",
