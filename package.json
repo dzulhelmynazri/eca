@@ -71,7 +71,7 @@
 		"oxlint": "^1.77.0",
 		"turbo": "^2.10.8",
 		"typescript": "^7.0.2",
-		"ultracite": "7.10.1"
+		"ultracite": "7.10.3"
 	},
 	"overrides": {
 		"ai": "^7.0.38"
