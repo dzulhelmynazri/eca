@@ -24,7 +24,7 @@
 		"@use-forever/contracts": "workspace:*",
 		"@vercel/connect": ">=0.6.0",
 		"chat": "^4.36.0",
-		"eve": "^0.30.6",
+		"eve": "^0.38.3",
 		"redis": "^6.2.0",
 		"zod": "4.4.3"
 	},
